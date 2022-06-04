@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "Nh/dvBxUahxtvucxMvDzfgW/hkUTQ82y8C/H02drPRQ=",
+  "Source": "Auth2Tests",
+  "BasePath": "_content/Auth2Tests",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "/Users/gurhankuras/Desktop/dotnet-projects/events/Auth/Auth.csproj",
+      "Version": 2,
+      "Source": "Auth",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

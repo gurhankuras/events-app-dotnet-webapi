@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  db:
+    container_name: dotnet-mongodb
+    image: 'mongo:4.2'
+    ports:
+      - "27017:27017"
+  elasticsearch:
+    container_name: elasticsearch
+    image: 'elasticsearch:8.2.0'
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  webapi:
+    container_name: dotnet-webapi
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
