@@ -1,5 +1,6 @@
 
 using Auth.AsyncServices;
+using Auth.Dto;
 using Auth.Models;
 using Auth.Services;
 using AutoMapper;

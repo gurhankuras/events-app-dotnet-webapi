@@ -1,3 +1,4 @@
+using Auth.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

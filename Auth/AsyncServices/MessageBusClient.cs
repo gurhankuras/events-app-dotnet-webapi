@@ -52,6 +52,11 @@ class RabbitMQMessageBusClient : IMessageBusClient
         }
     }
 
+    public void PublishConfirmationEmail()
+    {
+        
+    }
+
     private void SendMessage(string message) 
     {
         var body = Encoding.UTF8.GetBytes(message);

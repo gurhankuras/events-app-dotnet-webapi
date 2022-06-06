@@ -1,3 +1,4 @@
+using Auth.Dto;
 using Auth.Models;
 using AutoMapper;
 using MongoDB.Driver.GeoJsonObjectModel;

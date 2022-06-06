@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class LogRouteFilter : IAsyncActionFilter
+public class RouteLoggerFilter : IAsyncActionFilter
 {
-    private readonly ILogger<LogRouteFilter> _logger;
+    private readonly ILogger<RouteLoggerFilter> _logger;
 
-    public LogRouteFilter(ILogger<LogRouteFilter> logger)
+    public RouteLoggerFilter(ILogger<RouteLoggerFilter> logger)
     {
         _logger = logger;
     }

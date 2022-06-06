@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Auth.Linkedin;
 using Auth.Config;
+using Auth.Dto;
 
 public interface ILinkedinClient {
     public Task<LinkedInAccessToken> GetAccessToken(LinkedInVerificationRequest request);

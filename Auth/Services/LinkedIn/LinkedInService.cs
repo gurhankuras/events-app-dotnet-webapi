@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Web;
+using Auth.Dto;
 using Microsoft.AspNetCore.Identity;
 using mongoidentity;
 using Newtonsoft.Json;

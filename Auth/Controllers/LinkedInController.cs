@@ -1,9 +1,11 @@
+using Auth.Dto;
 using Auth.Exceptions;
 using Auth.Linkedin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using mongoidentity;
+namespace Auth.Dto;
 
 [ApiController]
 [Route("linkedin")]

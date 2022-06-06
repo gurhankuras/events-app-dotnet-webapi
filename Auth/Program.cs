@@ -1,7 +1,5 @@
 using Auth.JwtExtensions;
 using Auth.Jwt;
-using Amazon.Runtime;
-using Amazon.SimpleEmail;
 using MongoDB.Driver;
 using Auth.Services;
 using FluentValidation.AspNetCore;
@@ -46,18 +44,9 @@ builder.Services.AddSingleton<IAmazonS3, AmazonS3Client>(options => {
 });
 
 builder.Services.AddSingleton<AWSFileUploader>();
-builder.Services.AddSingleton<AWSEmailSettings>(
-    builder.Configuration.GetSection("EmailSendingSettings").Get<AWSEmailSettings>());
 var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
 
 builder.Services.AddSingleton<IMongoClient, MongoClient>(b => new MongoClient(mongoDbSettings.ConnectionString));
-builder.Services.AddSingleton<IEmailSender, AWSEmailSender>();
-builder.Services.AddSingleton<IAmazonSimpleEmailService, AmazonSimpleEmailServiceClient>(builder => {
-    var settings = builder.GetRequiredService<AWSEmailSettings>();
-    var credentials = new BasicAWSCredentials(settings.SmtpUser, settings.SmtpPassword);
-    var client = new AmazonSimpleEmailServiceClient(credentials, Amazon.RegionEndpoint.USEast1);
-    return client;
-});
 
 builder.Services.AddSingleton<IUserRepository, MongoUserRepository>();
 builder.Services.AddSingleton<IEventRepository, MongoEventRepository>();
@@ -86,7 +75,7 @@ builder.Services.AddJwtAuthService(builder.Configuration);
 // Add services to the container.
 builder.Services.AddControllers(options => {
     if (builder.Environment.IsDevelopment()) {
-        options.Filters.Add<LogRouteFilter>();
+        options.Filters.Add<RouteLoggerFilter>();
     }
     options.Filters.Add<ValidationFilter>();
 })

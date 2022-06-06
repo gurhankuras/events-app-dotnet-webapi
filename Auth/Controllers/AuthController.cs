@@ -2,14 +2,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Auth.Dto;
 using Auth.Jwt;
-using Auth.Models;
 using Auth.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Bson;
 
 [ApiController]
 [Route("[controller]")]
@@ -18,14 +17,12 @@ public class AuthController : ControllerBase
 {
     private readonly IUserRepository _userRepo;
     private readonly IAuthenticationService _authenticationService;
-    private readonly IEmailSender _emailSender;
     private readonly IMapper _mapper;
 
-    public AuthController(IUserRepository userRepo, IAuthenticationService authenticationService, IEmailSender emailSender, IMapper mapper) 
+    public AuthController(IUserRepository userRepo, IAuthenticationService authenticationService, IMapper mapper) 
     {
         _userRepo = userRepo;
         _authenticationService = authenticationService;
-        _emailSender = emailSender;
         _mapper = mapper;
     }
 
@@ -34,44 +31,11 @@ public class AuthController : ControllerBase
     [HttpPost("signin")]
     public async Task<ActionResult<SignInResponse>> SignIn([FromBody] SignInRequest body)
     {
-       //await _emailSender.Send("gurhankuras@hotmail.com", "C# deneme2", "<h1>Hello</h1>");
-        //await _emailSender.Register("xecitij884@3dmasti.com");
         return new SignInResponse {
             Id = Guid.NewGuid().ToString(),
             Email = body.Email
         };
     }
-    
-    /*
-    [HttpPost("signup")]
-    public async Task<ActionResult<SignUpResponse>> SignUp([FromBody] SignUpRequest body)
-    {
-
-        var userExists = await _userRepo.IsUserExists(body.Email);
-        if (userExists) {
-            return BadRequest(new ErrorMessage("User already exists with provided email"));
-        }
-        var user = _mapper.Map<User>(body);
-        
-        try
-        {
-            
-            await _userRepo.Create(user);
-            var verificationToken = generateJwtToken("secretsecretsecre", user.Id.ToString());
-            await _userRepo.SetEmailVerificationToken(user.Id.ToString(), verificationToken);
-            var token = _authenticationService.GenerateAccessToken(user.Id.ToString(), email: user.Email, role: "standart");
-            var verificationLink = generateEmailVerificationLink("https://google.com", verificationToken);
-            Console.WriteLine(verificationToken);
-            HttpContext.Response.AddAuthHeader(token);
-        }
-        catch (System.Exception ex)
-        {
-            return StatusCode(500, new ErrorMessage($"Bir hata oldu: {ex.Message}"));
-        }
-        
-        return _mapper.Map<SignUpResponse>(user);
-    }
-    */
 
      private string generateJwtToken(string secret, string id)
     {
@@ -85,11 +49,6 @@ public class AuthController : ControllerBase
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-
-    private string generateEmailVerificationLink(string baseUrl, string token) 
-    {
-        return $"{baseUrl}?token={token}";
     }
 
     //[TypeFilter(typeof(CustomAuthorizationFilter))]
