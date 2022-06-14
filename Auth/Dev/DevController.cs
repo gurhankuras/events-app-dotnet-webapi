@@ -26,7 +26,7 @@ public class DevController: ControllerBase
         foreach (var eventDto in body.Events)
         {
             var e = _mapper.Map<Event>(eventDto);
-            e.CreatedAt = DateTime.UtcNow;
+            //e.CreatedAt = DateTime.UtcNow;
             await _eventRepo.Create(e);
             var a = await _elasticClient.IndexDocumentAsync<Event>(e);
             //_mapper.Map<CreatedEventResponse>(e);

@@ -6,6 +6,10 @@ using AutoMapper;
 public interface IEventService 
 {
     Task<IEnumerable<NearEvent>> GetNearEventsAsync(Coordinates location);
+    Task<IEnumerable<EventByCategoryResponse>> GetByCategory(string category);
+    Task<Event?> GetById(string id);
+    Task SetStreaming(string id, PrivateEventLiveStreamInfo streamInfo);
+
 }
 
 public class EventService : IEventService
@@ -18,6 +22,17 @@ public class EventService : IEventService
         _repository = repository;
         this._mapper = mapper;
     }
+
+    public async Task<IEnumerable<EventByCategoryResponse>> GetByCategory(string category)
+    {
+        return await _repository.GetByCategory(category);
+    }
+
+    public async Task<Event?> GetById(string id) 
+    {
+        return await _repository.GetById(id);
+    }
+
     public async Task<IEnumerable<NearEvent>> GetNearEventsAsync(Coordinates location)
     {
         if (location is null)
@@ -27,5 +42,10 @@ public class EventService : IEventService
 
         var events = await _repository.GetNearEvents(location);
         return _mapper.Map<IEnumerable<NearEvent>>(events);
+    }
+
+    public async Task SetStreaming(string id, PrivateEventLiveStreamInfo streamInfo)
+    {
+        await _repository.SetStreaming(id, streamInfo);
     }
 }

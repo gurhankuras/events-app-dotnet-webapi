@@ -12,6 +12,8 @@ public class MappingProfile : Profile
         CreateMap<SignUpRequest, User>()
         .ForMember(s => s.Password, opt => opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password)));
 
+        CreateMap<PrivateEventLiveStreamInfo, PublicEventLiveStreamInfo>();
+        CreateMap<Event, EventByCategoryResponse>();
         CreateMap<User, SignUpResponse>()
         .ForMember(res => res.Id, opt => opt.MapFrom(src => src.Id.ToString()));
 

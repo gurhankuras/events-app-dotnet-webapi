@@ -2,13 +2,14 @@
 using Auth.Dto;
 using Auth.Linkedin;
 using FluentValidation;
+/*
 public class CreateEventRequestValidator: AbstractValidator<CreateEventRequest>
 {
     public CreateEventRequestValidator()
     {
         setRuleForDesciption();
         setRuleForTitle();
-        setRuleForStartingDate();
+        //setRuleForStartingDate();
 
         RuleFor(x => x.Image)
             .NotNull().WithName("image");
@@ -48,6 +49,7 @@ public class CreateEventRequestValidator: AbstractValidator<CreateEventRequest>
             .WithMessage(ValidatorUtils.MaxLengthMessage(fieldName, maxLength));
     }
 
+
     private void setRuleForStartingDate() 
     {
         RuleFor(x => x.At)
@@ -55,25 +57,7 @@ public class CreateEventRequestValidator: AbstractValidator<CreateEventRequest>
         .WithMessage("Starting date can't be after now");
     }
 
-    private bool BeAValidDateAndAfterNow(DateTime value)
-    {
-        //DateTime date;
-        //var parsed = DateTime.TryParse(value, out date);
-/*        
-        if (parsed) 
-        {
 
-*/
-            return value > DateTime.UtcNow;
-  /*
-        }
-        */
-
-        //return parsed;
-    }
-
-
-}
 
 public static class ValidatorUtils 
 {
@@ -87,3 +71,4 @@ public static class ValidatorUtils
         return $"{fieldName} length must not exceed {length}";
     }
 }
+*/

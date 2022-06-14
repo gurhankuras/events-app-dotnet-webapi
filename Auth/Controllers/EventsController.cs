@@ -6,6 +6,7 @@ using Auth.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Nest;
 
@@ -38,15 +39,30 @@ public class EventsController : ControllerBase
     }
 
 
-
+    [Authorize]
     [HttpPost]
     public async Task<object> CreateEvent([FromBody] CreateEventRequest req)
     {  
+        var id = User.FindFirst("id")?.Value;
+
+        if (id == null) 
+        {
+            return Unauthorized();
+        }
         var e = _mapper.Map<Event>(req);
+        e.CreatorId = new Guid(id);
         e.CreatedAt = DateTime.UtcNow;
+        //e.CreatedAt = DateTime.UtcNow;
         await _eventRepo.Create(e);
         var a = await _elasticClient.IndexDocumentAsync<Event>(e);
-        return _mapper.Map<CreatedEventResponse>(e);
+        return StatusCode(201, _mapper.Map<CreatedEventResponse>(e));
+    }
+
+    [HttpPost("test")]
+    public async Task<object> Test([FromBody] dynamic req) {
+        Console.WriteLine(DateTime.UtcNow.ToString("o"));
+        Console.Write(req);
+        return req;
     }
 
     [HttpGet("search")]
@@ -59,7 +75,7 @@ public class EventsController : ControllerBase
         return _mapper.Map<IReadOnlyCollection<CreatedEventResponse>>(response.Documents);
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpGet]
     public async Task<IEnumerable<NearEvent>> GetNearEvents([FromQuery] GetNearEventsQuery query)
     {  
@@ -70,6 +86,13 @@ public class EventsController : ControllerBase
         };
         var events = await _eventService.GetNearEventsAsync(location);
         return events;
+    }
+
+    [HttpGet("category")]
+    public async Task<IEnumerable<EventByCategoryResponse>> GetByCategory([FromQuery] string category) 
+    {
+        var categoricEvents = await _eventService.GetByCategory(category);
+        return categoricEvents;
     }
     
 }

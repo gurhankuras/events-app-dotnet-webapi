@@ -111,7 +111,7 @@ namespace mongoidentity.Controllers
                 urlBuilder.Host = "localhost";
                 urlBuilder.Path = "account/email/verify";
                 urlBuilder.Scheme = "http";
-                urlBuilder.Port = 5000;
+                urlBuilder.Port = 5100;
                 urlBuilder.Query = $"userId={encodedUserId}&token={encodedToken}";
 
 

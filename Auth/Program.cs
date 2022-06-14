@@ -13,16 +13,20 @@ using Auth.AsyncServices;
 using Auth.Linkedin;
 using System.Reflection;
 using Auth.Filters;
+using Newtonsoft.Json;
 using Auth.Config;
+using Microsoft.AspNetCore.Http.Json;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
+//BsonSerializer.RegisterSerializer(typeof(DateTime), new BsonUtcDateTimeSerializer());
 var builder = WebApplication.CreateBuilder(args);
 AWSConfigsS3.UseSignatureVersion4 = true;
-
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserProvider, UserProvider>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.WebHost.ConfigureKestrel(options => {   options.ListenAnyIP(5000); });
+builder.WebHost.ConfigureKestrel(options => {   options.ListenAnyIP(5100); });
 builder.Services.AddSingleton<IElasticClient, ElasticClient>(opt => {
     var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
     .DefaultMappingFor<Event>(x => x.IndexName("events"));
@@ -68,7 +72,11 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => {
     .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(mongoDbSettings.ConnectionString, mongoDbSettings.Name)
     .AddDefaultTokenProviders();
 builder.Services.AddJwtAuthService(builder.Configuration);
-
+builder.Services.Configure<JsonOptions>(options =>
+{
+    //options.SerializerOptions
+    //options.SerializerOptions.Converters.Add(new DateTimeConverter());
+});
 
 
 
@@ -87,6 +95,7 @@ builder.Services.AddControllers(options => {
     options.ImplicitlyValidateRootCollectionElements = true;
     options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
