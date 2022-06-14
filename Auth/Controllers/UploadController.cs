@@ -1,4 +1,5 @@
 using Auth.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -14,15 +15,22 @@ public class UploadController : ControllerBase
 
 
 
+    [Authorize]
     [HttpGet]
-    public async Task<GetPresignedResponse> GeneratePresignedURL([FromQuery] GeneratePresignedURLQuery query)
+    public async Task<ActionResult<GetPresignedResponse>> GeneratePresignedURL([FromQuery] GeneratePresignedURLQuery query)
     {  
-        var url = await _uploader.GetUploadURL(query.Key);
+        var id = User.FindFirst("id")?.Value;
+
+        if (id == null) 
+        {
+            return Unauthorized();
+        }
+        var url = await _uploader.GetUploadURL(query.Type, id);
         return new GetPresignedResponse { Url = url }; 
     }
 }
 
 
 public class GeneratePresignedURLQuery {
-    public string Key { get; set; }
+    public string Type { get; set; }
 }

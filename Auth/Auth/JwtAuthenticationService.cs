@@ -24,7 +24,8 @@ public class JwtAuthenticationService: IAuthenticationService {
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim> {
             new Claim("id", user.Id.ToString()),
-            new Claim("email", user.Email),        
+            new Claim("email", user.Email), 
+            new Claim("image", FileStorageUtils.getProfileImageURL(user.Id.ToString()))       
         };
 
         var roles = await userManager.GetRolesAsync(user);

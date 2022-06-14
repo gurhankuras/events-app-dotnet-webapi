@@ -68,12 +68,14 @@ namespace mongoidentity.Controllers
             {
                 return BadRequest("User not found");
             }
-
+            
+            
             return Ok(new {
                 Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
-                Linkedin = user.LinkedinInfo 
+                Linkedin = user.LinkedinInfo,
+                Image = FileStorageUtils.getProfileImageURL(user.Id.ToString())
             });
         }
 
@@ -116,7 +118,9 @@ namespace mongoidentity.Controllers
 
 
                 Console.WriteLine(urlBuilder.Uri);
-                return StatusCode(201, _mapper.Map<SignInUserResponse>(appUser));
+                var res =  _mapper.Map<SignInUserResponse>(appUser);
+                res.Image = FileStorageUtils.getProfileImageURL(appUser.Id.ToString());
+                return StatusCode(201, res);
             }
 
             return StatusCode(400, result.Errors.FirstOrDefault());
@@ -193,7 +197,9 @@ namespace mongoidentity.Controllers
                 var token = await _tokenGenerator.GenerateAccessToken(user, _userManager);
                 
                 HttpContext.Response.AddAuthHeader(token);
-                return _mapper.Map<SignInUserResponse>(user);
+                var res = _mapper.Map<SignInUserResponse>(user);
+                res.Image = FileStorageUtils.getProfileImageURL(res.Id);
+                return res;
             }
 
             return StatusCode(400, new { Message = "Password is not correct"} );

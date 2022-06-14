@@ -50,8 +50,18 @@ public class EventsController : ControllerBase
             return Unauthorized();
         }
         var e = _mapper.Map<Event>(req);
+
         e.CreatorId = new Guid(id);
-        e.CreatedAt = DateTime.UtcNow;
+        var now = DateTime.UtcNow;
+        
+        if (now.Millisecond == 0) {
+            now.AddMilliseconds(1);
+        }
+        if (e.At.Millisecond == 0) {
+            e.At.AddMilliseconds(1);
+        }
+        
+        e.CreatedAt = now;
         //e.CreatedAt = DateTime.UtcNow;
         await _eventRepo.Create(e);
         var a = await _elasticClient.IndexDocumentAsync<Event>(e);

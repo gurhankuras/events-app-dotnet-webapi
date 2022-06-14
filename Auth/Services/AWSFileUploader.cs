@@ -9,12 +9,11 @@ public class AWSFileUploader {
         _client = client;
     }
 
-    public Task<string> GetUploadURL(string key) {
-
+    public Task<string> GetUploadURL(string type, string filename) {
         GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
         {
             BucketName = "gkevents-app",
-            Key = key,
+            Key = $"{type}/{filename}",
             Verb = HttpVerb.PUT,
             Expires = DateTime.Now.AddMinutes(5)
         };
